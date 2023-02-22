@@ -1,0 +1,34 @@
+[package]
+name = "tcp-demo"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name="tcp"
+path="src/lib.rs"
+
+[[bin]]
+name="tcp_client"
+path= "src/tcp_client.rs"
+
+[[bin]]
+name="tcp_server"
+path= "src/tcp_server.rs"
+
+
+[[bin]]
+name="tokio_tcp_client"
+path= "src/tokio_tcp_client.rs"
+
+[[bin]]
+name="tokio_tcp_server"
+path= "src/tokio_tcp_server.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+#clap = "3.2"
+#log = "0.4"
+#futures = "0.3.5"
+async-trait = "0.1.64"
+tokio = {version="1",features = ["full"]}
