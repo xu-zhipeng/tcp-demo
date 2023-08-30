@@ -1,7 +1,7 @@
 use std::{io, thread};
 use std::net::{Shutdown, TcpListener, TcpStream};
 use std::time::Duration;
-use tcp::{SocketRecvTrait, SocketSendTrait};
+use socket::{SocketRecvTrait, SocketSendTrait};
 
 #[tokio::main]
 async fn main() -> Result<(), io::Error> {
@@ -29,13 +29,17 @@ async fn main() -> Result<(), io::Error> {
 
 fn process_data(mut stream: TcpStream) -> Result<(), io::Error> {
     // 接收数据
-    let request = stream.recv()?;
+    let request = stream.read_len()?;
     println!("Client Request: {}", &request);
     // 发送回复
-    let response = format!("The server receives your message, msg: {}", request);
-    stream.send(response)?;
+    let response = format!("The server receives your message, msg: {}", &request);
+    // send_len 通过content-length 标识数据长度
+    stream.send_len(response)?;
+    // send_line 通过空行\n\n 作为结束标识
+    // stream.send_line(response)?;
     //关闭 TcpStream 的写操作 否则 read会阻塞 无法返回0
     //这里可以不关,因为到此程序已经结束了,整个tcp连接都会关闭
+    // stream.send(response)?;
     // stream.shutdown(Shutdown::Write)?;
     Ok(())
 }

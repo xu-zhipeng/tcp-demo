@@ -1,6 +1,7 @@
 use tokio::io::{self, AsyncWriteExt, ReadHalf};
 use tokio::net::TcpStream;
-use tcp::{SocketAsyncRecvTrait, SocketAsyncSendTrait};
+use socket::{SocketAsyncRecvTrait, SocketAsyncSendTrait};
+use tcp::socket::{SocketAsyncRecvTrait, SocketAsyncSendTrait};
 
 #[tokio::main]
 async fn main() -> Result<(), io::Error> {
@@ -11,9 +12,13 @@ async fn main() -> Result<(), io::Error> {
     //发送数据
     // let msg = "abcdefghijklmnop";
     let msg = "abcdefghijklmnopqrstuvwxyz";
-    wr.send(msg.to_string()).await?;
+    // send_len 通过content-length 标识数据长度
+    wr.send_len(msg.to_string()).await?;
+    // send_line 通过空行\n\n 作为结束标识
+    // wr.send_line(msg.to_string()).await?;
     //关闭 TcpStream 的写操作 否则 read会阻塞 无法返回0
-    wr.shutdown().await?;
+    // wr.send(msg.to_string()).await?;
+    // wr.shutdown().await?;
 
     process_data(rd).await?;
 
@@ -22,8 +27,8 @@ async fn main() -> Result<(), io::Error> {
 
 pub async fn process_data(mut rd: ReadHalf<TcpStream>) -> Result<(), io::Error> {
     // 接收回复
-    let response = rd.recv().await?;
-    println!("Server Response: {}", response);
+    let response = rd.read_len().await?;
+    println!("Server Response: {}", &response);
     Ok(())
 }
 

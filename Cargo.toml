@@ -7,28 +7,52 @@ edition = "2021"
 name="tcp"
 path="src/lib.rs"
 
-[[bin]]
+[[example]]
 name="tcp_client"
 path= "src/tcp_client.rs"
 
-[[bin]]
+[[example]]
 name="tcp_server"
 path= "src/tcp_server.rs"
 
-
-[[bin]]
+[[example]]
 name="tokio_tcp_client"
 path= "src/tokio_tcp_client.rs"
 
-[[bin]]
+[[example]]
 name="tokio_tcp_server"
 path= "src/tokio_tcp_server.rs"
+
+[[example]]
+name="tokio_vsock_client"
+path= "src/tokio_vsock_client.rs"
+
+[[example]]
+name="tokio_vsock_server"
+path= "src/tokio_vsock_server.rs"
+
+[[example]]
+name="vsock_client"
+path= "src/vsock_client.rs"
+
+[[example]]
+name="vsock_server"
+path= "src/vsock_server.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-#clap = "3.2"
-#log = "0.4"
-#futures = "0.3.5"
 async-trait = "0.1.64"
 tokio = {version="1",features = ["full"]}
+#vsock
+[target.'cfg(linux)'.dependencies]
+tokio-vsock = { version = "0.4.0", optional = true }
+
+[dev-dependencies]
+
+[features]
+default = ["socket"]
+socket = []
+vsock = ["tokio-vsock"]
+
+

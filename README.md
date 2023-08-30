@@ -1,4 +1,4 @@
-# Tcp 连接示例
+# Tcp Socket以及VSocket连接示例
 
 ## TCP连接描述
 
@@ -18,7 +18,7 @@ Client发送数据   这时候连接没有关闭，  server read 阻塞 不会�
 
 ​		有两种方案：
 
-​				1：需要两边协商规定，提供结束标识，例如http 的keepalive 用空行做标识
+​				1：需要两边协商规定，提供结束标识，例如http 的keepalive 用空行做标识,或者规定数据长度
 
 ​				2：写入数据后将 写通道 关闭，在这之后 无法再写入数据。
 
@@ -48,7 +48,9 @@ server write 如果选择方案2，并且socket 没有立即销毁：write shutd
 
 client read
 
+## Vsock
 
+vosock 和tcp 正常的socket一样没什么区别，就是所使用的stream对象不一样，这里推荐tokio_vsock，可以是用 VsockStream
 
 ## 其他
 
